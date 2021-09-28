@@ -1,32 +1,54 @@
 ﻿using System;
+using System.Text;
+using System.Collections.Generic;
 
 namespace tries
 {
-    class Program
+    public class Program
     {
         static TrieNode root = new();
         static void Main(string[] args)
         {
             Console.WriteLine("Tries Started!");
 
-            string feed = string.Empty;
+            StringBuilder feed = new StringBuilder();
 
-            while (feed != "exit")
+            while (feed.ToString() != "exit")
             {
-                feed = Console.ReadLine();
-                if (feed != "exit")
-                    AddString(root, feed);
+                ConsoleKeyInfo k = new ConsoleKeyInfo();
+                while (true)
+                {
+                    k = Console.ReadKey(false);
+                    if (k.Key == ConsoleKey.Enter)
+                    {
+                        Console.Write("\n");
+                        break;
+                    }
+                    if (!Char.IsPunctuation(k.KeyChar))
+                        feed.Append(k.KeyChar);
 
-                // TrieNode node = GetStringNode(root, feed);
-                // if (node == null)
-                //     Console.WriteLine("nope");
-                // else
-                //     Console.WriteLine(node.Key);
+                }
+
+                if (feed.ToString() != "exit")
+                    AddString(root, feed.ToString());
+                else
+                    break;
+
+                feed.Clear();
             }
 
-            PrintDown(root);
-            Console.WriteLine();
-            PrintSide(root);
+            string temp = string.Empty;
+            while (temp != "exit")
+            {
+                Console.WriteLine("Gimme template!");
+                temp = Console.ReadLine();
+                var options = GetStrings(GetStringNode(root, temp), temp);
+                foreach (var item in options)
+                {
+                    Console.WriteLine(item.ToString());
+                }
+            }
+
             Console.WriteLine();
             Console.WriteLine($"That's all! There are {TrieNode.count} nodes.");
         }
@@ -76,9 +98,6 @@ namespace tries
 
         static TrieNode GetStringNode(TrieNode node, string template)
         {
-            if (template.Length == 0)
-                return node;
-
             if (node == null)
                 return null;
             TrieNode next = null;
@@ -91,13 +110,54 @@ namespace tries
             {
                 next = node.Brother;
             }
+            if (template.Length == 0)
+                return node;
 
             return GetStringNode(next, template);
         }
 
-        static string[] GetStrings(TrieNode node)
+        static List<StringBuilder> GetStrings(TrieNode node, string init)
         {
-            return null;
+            List<StringBuilder> array = new List<StringBuilder>();
+            array.Add(new StringBuilder(init));
+
+            if (node is not null)
+            {
+                // If node has child means it can have brothers too.
+                if (node.HasChild())
+                {
+                    GetStringHelper(node.Child, array, array[0]);
+                }
+            }
+
+            return array;
+        }
+
+        static void GetStringHelper(TrieNode node, List<StringBuilder> array, StringBuilder current)
+        {
+            if (node is null)
+                return;
+
+            if (node.HasBrother())
+            {
+                var bro = GenerateNewBuilder(array, current);
+                GetStringHelper(node.Brother, array, bro);
+            }
+
+            current.Append(node.Key);
+
+            if (node.HasChild())
+            {
+                GetStringHelper(node.Child, array, current);
+            }
+        }
+
+        public static StringBuilder GenerateNewBuilder(List<StringBuilder> array, StringBuilder copy)
+        {
+            StringBuilder str = new StringBuilder(copy.ToString());
+            array.Add(str);
+
+            return str;
         }
 
         static void PrintDown(TrieNode node)

@@ -1,24 +1,20 @@
-
-
-namespace tries
+namespace Tries
 {
-    public class TrieNode
+    public class TrieNode<T>
     {
-        public static int count = 0;
-        public char Key { get; set; }
-        public TrieNode Brother { get; set; }
-        public TrieNode Child { get; set; }
+        public T Key { get; set; }
+        public bool End { get; set; }
+        public T Brother { get; set; }
+        public T Child { get; set; }
 
         public TrieNode()
         {
-            Key = char.MinValue;
-            count++;
+            Key = default(T);
         }
 
-        public TrieNode(char c)
+        public TrieNode(T key)
         {
-            Key = c;
-            count++;
+            Key = key;
         }
 
         public bool HasBrother()

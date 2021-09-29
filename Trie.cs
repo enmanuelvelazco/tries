@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace tries
+﻿namespace Tries
 {
-    public abstract class Trie
+    public abstract class Trie<T>
     {
-
+        protected TrieNode<T> root;
     }
 }

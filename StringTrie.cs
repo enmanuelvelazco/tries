@@ -51,31 +51,6 @@ namespace Tries
             AddStringRecursive(next, str);
         }
 
-        private TrieNode<char> GetStringNode(String str)
-        {
-            return GetStringNodeRecursive(root, str);
-        }
-
-        private TrieNode<char> GetStringNodeRecursive(TrieNode<char> node, string template)
-        {
-            if (node == null)
-                return null;
-            TrieNode<char> next = null;
-            if (node.Key == template[0])
-            {
-                template = template.Substring(1);
-                next = node.Child;
-            }
-            else
-            {
-                next = node.Brother;
-            }
-            if (template.Length == 0)
-                return node;
-
-            return GetStringNodeRecursive(next, template);
-        }
-
         public List<StringBuilder> GetStrings(String init)
         {
             List<StringBuilder> array = new List<StringBuilder>();
@@ -111,6 +86,31 @@ namespace Tries
             {
                 GetStringRecursive(node.Child, array, current);
             }
+        }
+
+        private TrieNode<char> GetStringNode(String str)
+        {
+            return GetStringNodeRecursive(root, str);
+        }
+
+        private TrieNode<char> GetStringNodeRecursive(TrieNode<char> node, string template)
+        {
+            if (node == null)
+                return null;
+            TrieNode<char> next = null;
+            if (node.Key == template[0])
+            {
+                template = template.Substring(1);
+                next = node.Child;
+            }
+            else
+            {
+                next = node.Brother;
+            }
+            if (template.Length == 0)
+                return node;
+
+            return GetStringNodeRecursive(next, template);
         }
 
         private StringBuilder GenerateNewBuilder(List<StringBuilder> array, StringBuilder copy)

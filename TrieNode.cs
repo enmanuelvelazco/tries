@@ -4,8 +4,8 @@ namespace Tries
     {
         public T Key { get; set; }
         public bool End { get; set; }
-        public T Brother { get; set; }
-        public T Child { get; set; }
+        public TrieNode<T> Brother { get; set; }
+        public TrieNode<T> Child { get; set; }
 
         public TrieNode()
         {

@@ -45,15 +45,12 @@ namespace Tries
                     Console.Write(key.KeyChar);
                 }
 
-
-
             } while (feed.ToString() != "exit");
-
         }
 
         static void InitDB()
         {
-            string[] db = { "dir", "del", "do", "delete" };
+            string[] db = { "dir", "del", "do", "delete", "dele" };
 
             foreach (string item in db)
                 trie.AddString(item);
